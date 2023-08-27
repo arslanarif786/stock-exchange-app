@@ -1,115 +1,51 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+  <q-layout view="lHh Lpr lFf" class="bg-gray-100">
+    <Topbar />
 
-        <q-toolbar-title>
-          Stock Exchange App
-        </q-toolbar-title>
+    <q-drawer :value="leftDrawerOpen" show-if-above bordered :width="465">
+      <div style="height: 60px" class="py-5 text-center bottom-border">
+        <span class="text-gray-600 font-semibold txt12"> NIFTY 50 </span>
+        <span class="text-brightRed font-semibold txt12 mx-1"> 19265.80 </span>
+        <span class="text-lightGray font-semibold txt10"> -120.90 (-0.62%) </span>
+        <span class="text-gray-600 font-semibold txt12 mx-1"> SENSEX </span>
+        <span class="text-brightRed font-semibold txt12"> 64886.51 </span>
+        <span class="text-lightGray font-semibold txt10 ml-1">
+          -365.83 (-0.56%)
+        </span>
+      </div>
+      
+    <div class="bg-gray-100 flex justify-end">
+        <Sidebar />
+    </div>
 
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container style="width: 97.2%" class="bg-gray-100">
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+import { defineComponent, ref } from "vue"
+import LeftArrow from "../assets/images/top-bar-left-arrow.png"
+import Topbar from "./Topbar.vue"
+import Sidebar from "./Sidebar.vue"
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: "MainLayout",
 
   components: {
-    EssentialLink
+    Sidebar,
+    Topbar
   },
 
-  setup () {
-    const leftDrawerOpen = ref(false)
+  setup() {
+    const leftDrawerOpen = ref(false);
 
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
+      leftDrawerOpen
+    };
+  },
+});
 </script>
