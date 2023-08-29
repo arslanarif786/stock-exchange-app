@@ -1,0 +1,3 @@
+<template>
+    positions
+</template>

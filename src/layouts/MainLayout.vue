@@ -2,11 +2,11 @@
   <q-layout view="lHh Lpr lFf" class="bg-gray-100">
     <Topbar />
 
-    <q-drawer :value="leftDrawerOpen" show-if-above bordered :width="465">
+    <q-drawer :value="leftDrawerOpen" show-if-above bordered :width="480">
       <div style="height: 60px" class="py-5 text-center bottom-border">
         <span class="text-gray-600 font-semibold txt12"> NIFTY 50 </span>
-        <span class="text-brightRed font-semibold txt12 mx-1"> 19265.80 </span>
-        <span class="text-lightGray font-semibold txt10"> -120.90 (-0.62%) </span>
+        <span class="text-brightGreen font-semibold txt12 mx-1"> 19265.80 </span>
+        <span class="text-lightGray font-semibold txt10"> 120.90 (0.62%) </span>
         <span class="text-gray-600 font-semibold txt12 mx-1"> SENSEX </span>
         <span class="text-brightRed font-semibold txt12"> 64886.51 </span>
         <span class="text-lightGray font-semibold txt10 ml-1">
