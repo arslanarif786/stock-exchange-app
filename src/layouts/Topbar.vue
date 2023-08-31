@@ -39,7 +39,7 @@
         <span class="cursor-pointer flex mt-0.5 mr-1 text-gray-600 hover:text-orange-500">
           <q-icon size="18px" name="notifications_none" />
         </span>
-        <span class="chip ml-3 cursor-pointer text-center -mt-0.5 text-green-500 pt-1.5 txt9 hover:text-orange-500 top-badge"> AA </span>
+        <span class="chip ml-3 cursor-pointer text-center -mt-0.5 text-green-500 pt-1.5 txt9 top-badge"> AA </span>
         <span class="ml-3 mr-12 cursor-pointer text-gray-600 hover:text-orange-500"> AGW951 </span>
       </div>
     </q-toolbar>
