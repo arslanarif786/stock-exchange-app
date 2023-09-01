@@ -33,7 +33,7 @@
           </q-td>
           <q-td key="instrument" :props="props">
             {{ props.row.instrument }}
-            <span class="txt8 text-gray-400"> NSE </span>
+            <span class="txt9 text-gray-400"> NSE </span>
           </q-td>
           <q-td key="product" :props="props">
             {{ props.row.product }}
