@@ -13,6 +13,7 @@
     </div>
     <executed-orders />
     <trades />
+    <div class="mb-20"></div>
   </q-page>
 </template>
 
