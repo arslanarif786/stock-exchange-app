@@ -39,7 +39,7 @@
 
     <div class="second-section">
       <div class="flex flex-col justify-center w-96 items-center text-center" style="margin-left:180px">
-        <img src="../assets//images/bag.png" alt="img" style="width:120px;height:80px;">
+        <img src="../assets/images/bag.png" alt="img" style="width:120px;height:80px;">
         <div class="text-gray-400">You don't have any stocks in your DEMAT yet. Get started
         </div>
         <div class="text-gray-400">

@@ -56,14 +56,13 @@
 .txt24 {
     font-size: 24px;
 }
+.txt28 {
+    font-size: 28px;
+}
 .txt42 {
     font-size: 42px;
 }
 
 .bottom-border {
     border-bottom: 1px solid #e8e8e8;
-}
-
-.cursor-pointer {
-    cursor: pointer;
 }
