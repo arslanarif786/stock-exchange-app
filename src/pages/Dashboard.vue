@@ -9,7 +9,10 @@
       <div class="flex">
         <div class="w-52">
           <div class="flex flex-col">
-            <span class="text-gray-600"> O <span class="ml-2"> Equity</span> </span>
+            <span class="text-gray-600 flex">
+              <img src="../assets/images/equity.png" alt="img" style="width:22px;height:20px;"/>
+              <span class="ml-2"> Equity</span>
+            </span>
             <span class="mt-3 txt42 font-thin text-gray-600"> 489.4</span>
             <span class="mt-0.5 text-gray-400 txt12"> Margin available</span>
           </div>
@@ -48,10 +51,13 @@
         <q-btn unelevated color="primary" class="mt-5 capitalize" style="width:150px;height:41px"> Start investing </q-btn>
       </div>
     </div>
-    <q-separator inset class="mt-20 mb-14 bg-borderGray"/>
+    <q-separator inset class="mt-20 mb-12 bg-borderGray"/>
 
     <div class="third-section mb-20 ml-7">
-      <div>Market overview</div>
+      <div class="flex items-center">
+        <img src="../assets/images/market.png" alt="img" style="width:30px;height:30px;">
+        <span class="ml-1 mt-1">Market overview</span>
+      </div>
       <div class="flex justify-between">
         <div class="cursor-pointer">
           <img src="../assets/images/dashboard-graph.png" alt="img" style="width:461px;height:180px;">

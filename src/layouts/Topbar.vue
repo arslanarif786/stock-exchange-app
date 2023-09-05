@@ -1,7 +1,7 @@
 <template>
   <q-header>
     <q-toolbar
-      style="height: 60px"
+      style="height: 59px;box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);"
       class="bg-white text-black bottom-border flex justify-between"
     >
       <img
@@ -36,8 +36,9 @@
           :class="active == 'apps' ? 'text-orange-500' : 'text-gray-600'"
           @click="routeToApps"> Apps </span>
         <q-separator vertical class="mr-3.5" />
-        <span class="cursor-pointer flex mt-0.5 mr-1 text-gray-600 hover:text-orange-500">
+        <span class="cursor-pointer flex mt-0.5 mr-1 text-gray-600 hover:text-orange-500 relative">
           <q-icon size="18px" name="notifications_none" />
+          <div class="notification-alert"></div>
         </span>
         <span class="chip ml-3 cursor-pointer text-center -mt-0.5 text-green-500 pt-1.5 txt9 top-badge"> AA </span>
         <span class="ml-3 mr-12 cursor-pointer text-gray-600 hover:text-orange-500"> AGW951 </span>
