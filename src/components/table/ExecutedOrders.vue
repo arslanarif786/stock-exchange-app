@@ -35,8 +35,10 @@
             {{ props.row.instrument }}
             <span class="txt9 text-gray-400"> NSE </span>
           </q-td>
-          <q-td key="product" :props="props">
-            {{ props.row.product }}
+          <q-td key="product" :props="props" class="flex justify-center items-center">
+            <div class="rounded-sm bg-gray-200 w-10 ml-5">
+              {{ props.row.product }}
+            </div>
           </q-td>
           <q-td key="qty" :props="props">
             {{ props.row.qty }}
