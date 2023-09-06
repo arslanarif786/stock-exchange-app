@@ -16,19 +16,42 @@
         class="bg-white"
         style="height: 91.5vh; max-height: 200vh; width: 431px"
       >
-        <Search />
-        <SearchList v-for="item in lists" :key="item.title" v-bind="item" />
+      <!-- Search Bar -->
+        <div class="pt-1 text-center">
+          <q-input
+            v-model="searchQuery"
+            dense
+            borderless
+            class="pb-1"
+            placeholder="Search eg: infy bse, nifty fut, nifty weekly, gold mcx"
+          >
+            <template v-slot:prepend>
+              <q-icon name="search" class="text-lightGray mt-1 ml-3" size="18px" />
+            </template>
+            <template v-slot:append>
+              <div class="cursor-text txt13 text-gray-300 mr-3 mt-1">{{ listCount }} / 50</div>
+            </template>
+          </q-input>
+          <q-separator class="bg-gray-200"/>
+        </div>
+
+        <!-- Search List -->
+        <SearchList
+          v-for="item in filteredList"
+          :key="item.title"
+          v-bind="item"
+          />
       </div>
     </div>
   </q-drawer>
 </template>
 
 <script setup>
-import { ref } from "vue"
-import Search from "../components/search/SearchBar.vue"
-import SearchList from "components/SearchList.vue"
+import { computed, ref } from "vue"
+import SearchList from "components/search/SearchList.vue"
 const leftDrawerOpen = ref(false)
-const lists = [
+const searchQuery = ref("")
+const lists = ref([
   {
     title: "SUZLON",
     caption: "",
@@ -85,5 +108,14 @@ const lists = [
     percentage: 4.77,
     changedPrice: 21.66,
   },
-]
+])
+
+const filteredList = computed(() => {
+  if(typeof searchQuery.value !== "string") {
+    return lists.value
+  }
+  return lists.value.filter((row) => row.title.toLowerCase().includes(searchQuery.value))
+})
+
+const listCount = computed(() => { return filteredList.value.length })
 </script>
