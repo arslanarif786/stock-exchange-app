@@ -78,5 +78,6 @@
     background-color: #ff8000;
     position: absolute;
     border-radius: 20px;
-    left:9px;
+    left:11px;
+    top: -1px;
 }

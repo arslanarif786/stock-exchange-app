@@ -16,8 +16,30 @@
         class="bg-white"
         style="height: 91.5vh; max-height: 200vh; width: 431px"
       >
-        <Search />
-        <SearchList v-for="item in lists" :key="item.title" v-bind="item" />
+      <!------------------------------- Search Bar ------------------------------->
+        <div class="pt-1 text-center">
+          <q-input
+            v-model="searchQuery"
+            dense
+            borderless
+            class="pb-1"
+            placeholder="Search eg: infy bse, nifty fut, nifty weekly, gold mcx"
+          >
+            <template v-slot:prepend>
+              <q-icon name="search" class="text-lightGray mt-1 ml-3" size="18px" />
+            </template>
+            <template v-slot:append>
+              <div class="cursor-text txt13 text-gray-300 mr-3 mt-1">{{ listCount }} / 50</div>
+            </template>
+          </q-input>
+          <q-separator class="bg-gray-200"/>
+        </div>
+
+        <!---------------------------- Draggable List ---------------------------->
+        <draggable-list
+          :search-query="searchQuery"
+          @list-count="getListCount"
+          />
       </div>
     </div>
   </q-drawer>
@@ -25,65 +47,13 @@
 
 <script setup>
 import { ref } from "vue"
-import Search from "../components/search/SearchBar.vue"
-import SearchList from "components/SearchList.vue"
+import DraggableList from "../components/draggable/DraggableList.vue"
+
 const leftDrawerOpen = ref(false)
-const lists = [
-  {
-    title: "SUZLON",
-    caption: "",
-    changeRate: -0.55,
-    percentage: 6.99,
-    changedPrice: 33.75,
-  },
-  {
-    title: "ZEAL",
-    caption: "BSE",
-    changeRate: -0.08,
-    percentage: 4.89,
-    changedPrice: 18.06,
-  },
-  {
-    title: "TAPARIA",
-    caption: "BSE",
-    changeRate: "0.00",
-    percentage: "0.00",
-    changedPrice: 2.66,
-  },
-  {
-    title: "VISHAL",
-    caption: "",
-    changeRate: 1.25,
-    percentage: 3.54,
-    changedPrice: 24.65,
-  },
-  {
-    title: "JUMBO",
-    caption: "BSE",
-    changeRate: 0.78,
-    percentage: 4.89,
-    changedPrice: 6.09,
-  },
-  {
-    title: "RANASUG",
-    caption: "",
-    changeRate: -0.05,
-    percentage: 3.22,
-    changedPrice: 24.65,
-  },
-  {
-    title: "UNISON",
-    caption: "BSE",
-    changeRate: -0.33,
-    percentage: 5.15,
-    changedPrice: 24.65,
-  },
-  {
-    title: "KEIL",
-    caption: "BSE",
-    changeRate: 0.75,
-    percentage: 4.77,
-    changedPrice: 21.66,
-  },
-]
+const listCount = ref(0)
+const searchQuery = ref("")
+
+const getListCount = (count) => {
+  listCount.value = count
+}
 </script>
