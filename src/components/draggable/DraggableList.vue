@@ -143,12 +143,98 @@
         <market-depth v-if="expandItemsList.includes(index)">
           <template v-slot:body>
             <q-card>
-              <q-card-section>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex
-                numquam, dolorum officiis modi facere maiores architecto
-                suscipit iste eveniet doloribus ullam aliquid.
-              </q-card-section>
+              <div class="flex justify-center pt-5">
+                <div>
+                  <q-table
+                    dense
+                    flat
+                    :rows="rowBlueTable"
+                    :columns="columnBlueTable"
+                    row-key="name"
+                    :separator="separator"
+                    hide-bottom
+                  />
+                  <div class="flex justify-between">
+                    <div class="txt13 ml-3 text-brightBlue">Total</div>
+                    <div class="txt13 mr-4 text-brightBlue">640</div>
+                  </div>
+                </div>
+                <div class="ml-4"></div>
+                <div>
+                  <q-table
+                    dense
+                    flat
+                    :rows="rowOrangeTable"
+                    :columns="columnOrangeTable"
+                    row-key="name"
+                    :separator="separator"
+                    hide-bottom
+                  />
+                  <div class="flex justify-between">
+                    <div class="txt13 ml-5 text-orange-500">Total</div>
+                    <div class="txt13 mr-4 text-orange-500">0</div>
+                  </div>
+                </div>
+              </div>
+
+              <q-separator class="mt-5 mb-3.5" inset />
+
+              <div class="w-full px-6 pb-5">
+              <div class="flex">
+                <div class="flex w-1/2 justify-between ">
+                  <div class="txt13 text-gray-500">Open</div>
+                  <div class="txt13">0.00</div>
+                </div>
+                <div class="flex w-1/2 pl-2 justify-between ">
+                  <div class="txt13 text-gray-500">High</div>
+                  <div class="txt13">1.00</div>
+                </div>
+              </div>
+
+              <div class="flex">
+                <div class="flex w-1/2 justify-between ">
+                  <div class="txt13 text-gray-500">Low</div>
+                  <div class="txt13">0.00</div>
+                </div>
+                <div class="flex w-1/2 pl-2 justify-between ">
+                  <div class="txt13 text-gray-500">Prev. Close</div>
+                  <div class="txt13">1.00</div>
+                </div>
+              </div>
+
+              <div class="flex">
+                <div class="flex w-1/2 justify-between ">
+                  <div class="txt13 text-gray-500">Volume</div>
+                  <div class="txt13">0.00</div>
+                </div>
+                <div class="flex w-1/2 pl-2 justify-between ">
+                  <div class="txt13 text-gray-500">Avg. price</div>
+                  <div class="txt13">1.00</div>
+                </div>
+              </div>
+
+              <div class="flex">
+                <div class="flex w-1/2 justify-between ">
+                  <div class="txt13 text-gray-500">LTQ</div>
+                  <div class="txt13">0.00</div>
+                </div>
+                <div class="flex w-1/2 pl-2 justify-between ">
+                  <div class="txt13 text-gray-500">LTT</div>
+                  <div class="txt13">1.00</div>
+                </div>
+              </div>
+
+              <div class="flex">
+                <div class="flex w-1/2 justify-between ">
+                  <div class="txt13 text-gray-500">Lower ciruit</div>
+                  <div class="txt13">0.00</div>
+                </div>
+                <div class="flex w-1/2 pl-2 justify-between ">
+                  <div class="txt13 text-gray-500">Upper circuit</div>
+                  <div class="txt13">1.00</div>
+                </div>
+              </div>
+              </div>
             </q-card>
           </template>
         </market-depth>
@@ -241,6 +327,121 @@ const lists = ref([
     changedPrice: 21.66,
   },
 ]);
+const separator = ref("vertical")
+const columnBlueTable = ref([
+  { name: 'bid', align: 'center', label: 'BID', field: 'bid' },
+  { name: 'orders', label: 'ORDERS', field: 'orders' },
+  { name: 'qty', align: 'right', label: 'QTY.', field: 'qty' },
+])
+const rowBlueTable = ref([
+  {
+    bid: 159,
+    orders: 6.0,
+    qty: 24
+  },
+  {
+    bid: 237,
+    orders: 9.0,
+    qty: 37,
+  },
+  {
+    bid: 262,
+    orders: 16.0,
+    qty: 23,
+  },
+  {
+    bid: 305,
+    orders: 3.7,
+    qty: 67,
+  },
+  {
+    bid: 356,
+    orders: 16.0,
+    qty: 49,
+  },
+  {
+    bid: 375,
+    orders: 0.0,
+    qty: 94,
+  },
+  {
+    bid: 392,
+    orders: 0.2,
+    qty: 98,
+  },
+  {
+    bid: 408,
+    orders: 3.2,
+    qty: 87,
+  },
+  {
+    bid: 452,
+    orders: 25.0,
+    qty: 51,
+  },
+  {
+    bid: 518,
+    orders: 26.0,
+    qty: 65,
+  }
+])
+const columnOrangeTable = ref([
+  { name: 'offer', align: 'center', label: 'OFFER', field: 'offer' },
+  { name: 'orders', label: 'ORDERS', field: 'orders' },
+  { name: 'qty', align: 'right', label: 'QTY.', field: 'qty' },
+])
+const rowOrangeTable = ref([
+  {
+    offer: 159,
+    orders: 6.0,
+    qty: 24
+  },
+  {
+    offer: 237,
+    orders: 9.0,
+    qty: 37,
+  },
+  {
+    offer: 262,
+    orders: 16.0,
+    qty: 23,
+  },
+  {
+    offer: 305,
+    orders: 3.7,
+    qty: 67,
+  },
+  {
+    offer: 356,
+    orders: 16.0,
+    qty: 49,
+  },
+  {
+    offer: 375,
+    orders: 0.0,
+    qty: 94,
+  },
+  {
+    offer: 392,
+    orders: 0.2,
+    qty: 98,
+  },
+  {
+    offer: 408,
+    orders: 3.2,
+    qty: 87,
+  },
+  {
+    offer: 452,
+    orders: 25.0,
+    qty: 51,
+  },
+  {
+    offer: 518,
+    orders: 26.0,
+    qty: 65,
+  }
+])
 
 // computed
 const filteredList = computed(() => {
