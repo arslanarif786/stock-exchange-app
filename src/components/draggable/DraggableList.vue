@@ -41,12 +41,21 @@
                 Chart (C)
               </q-tooltip>
             </div>
-            <div
+            <div v-if="!searchIsActive"
               class="mr-2 hover:!cursor-pointer px-1.5 my-2 !bg-slate-50 w-9 h-6 hover:text-slate-50 hover:!bg-gray-400 hover:border-gray-400 font-semibold text-center rounded-sm border border-black z-10"
               style="padding-top: 1px" :class="!hoverEffect ? 'hidden' : 'block'" @click="deleteItem(index, element)">
               <q-icon name="delete" class="mb-1" size="15px" />
               <q-tooltip anchor="top middle" self="bottom middle" :offset="[3, 3]" class="bg-black font-semibold txt13">
                 Delete (del)
+              </q-tooltip>
+            </div>
+            <div v-if="searchIsActive"
+              class="mr-2 hover:!cursor-pointer px-1.5 my-2 !bg-slate-50 w-9 h-6 hover:text-slate-50 hover:!bg-gray-400 hover:border-gray-400 font-semibold text-center rounded-sm border border-black z-10"
+              style="padding-top: 1px" :class="!hoverEffect ? 'hidden' : 'block'"
+              @click="addCurrencyToList(index, element)">
+              <q-icon name="add" class="mb-1" size="15px" />
+              <q-tooltip anchor="top middle" self="bottom middle" :offset="[3, 3]" class="bg-black font-semibold txt13">
+                Add (add)
               </q-tooltip>
             </div>
             <div
@@ -70,8 +79,7 @@
                     </q-item>
                     <q-separator />
                     <q-item clickable v-close-popup>
-                      <q-item-section> Fundamentals </q-item-section>
-                    </q-item>``
+                      <q-item-section> Fundamentals </q-item-section> </q-item>``
                     <q-item clickable v-close-popup>
                       <q-item-section> Technicals </q-item-section>
                     </q-item>
@@ -136,9 +144,10 @@
           <template v-slot:body>
             <q-card>
               <q-card-section>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-                commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-                eveniet doloribus ullam aliquid.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex
+                numquam, dolorum officiis modi facere maiores architecto
+                suscipit iste eveniet doloribus ullam aliquid.
               </q-card-section>
             </q-card>
           </template>
@@ -150,26 +159,30 @@
 </template>
 
 <script setup>
-import draggable from "vuedraggable"
-import MarketDepth from './MarketDepth.vue'
-import { computed, ref, watch } from "vue"
-import { useDialogStore } from '../../stores/handle-dialog'; // Replace with the correct path
-import data from '../../data'
+import draggable from "vuedraggable";
+import MarketDepth from "./MarketDepth.vue";
+import { computed, ref, watch } from "vue";
+import { useDialogStore } from "../../stores/handle-dialog";
+import { useMartekDepthDataStore } from "../../stores/market-depth-data";
+import data from "../../data";
+import { list } from "postcss";
 
 const DialogStore = useDialogStore();
+const marketDepthDataStore = useMartekDepthDataStore();
 
 // props
-const props = defineProps(["searchQuery"])
+const props = defineProps(["searchQuery"]);
 // emits
-const emits = defineEmits(["list-count"])
+const emits = defineEmits(["list-count"]);
 
 // data properties
-const expanded = ref(false)
-const hoverEffect = ref(false)
-const hoverItem = ref(0)
-const selectedDepth = ref(0)
-const dragging = ref(false)
-const expandItemsList = ref([])
+const expanded = ref(false);
+const hoverEffect = ref(false);
+const hoverItem = ref(0);
+const selectedDepth = ref(0);
+const dragging = ref(false);
+const expandItemsList = ref([]);
+const searchIsActive = ref(false);
 const lists = ref([
   {
     title: "SUZLON",
@@ -227,45 +240,50 @@ const lists = ref([
     percentage: 4.77,
     changedPrice: 21.66,
   },
-])
+]);
 
 // computed
 const filteredList = computed(() => {
-  const searchTerm = props.searchQuery.toLowerCase()
+  console.log("computed has run--------------")
+  const dbNamesJSON = localStorage.getItem("dbNames");
+  const dbNames = dbNamesJSON ? JSON.parse(dbNamesJSON) : [];
+  const searchTerm = props.searchQuery.toLowerCase();
   if (!searchTerm) {
-    return ''
+    searchIsActive.value = false;
+    return data.filter((obj) => dbNames.includes(obj.id) && obj);
   }
-  return data.filter((obj) =>
-    obj.name.toLowerCase().includes(searchTerm)
-  )
-})
+  searchIsActive.value = true;
+  return data.filter((obj) => obj.name.toLowerCase().includes(searchTerm));
+});
 
 // watcher
 watch(filteredList, (newVal) => {
-  emits("list-count", newVal.length)
-})
+  emits("list-count", newVal.length);
+});
 
 // methods
 const hoverEffectTrue = (index) => {
-  hoverEffect.value = true
-  hoverItem.value = index
-}
+  hoverEffect.value = true;
+  hoverItem.value = index;
+};
 const hoverEffectFalse = (index) => {
-  hoverEffect.value = false
-}
+  hoverEffect.value = false;
+};
 const alphabet_B = (index, element) => {
-  console.log("bbb------------>", index, element.title)
-  DialogStore.setCurrencyData(element, 'Buy')
-}
+  console.log("bbb------------>", index, element.title);
+  DialogStore.setCurrencyData(element, "Buy");
+};
 const alphabet_S = (index, element) => {
   console.log("SSS------------>", index, element);
-  DialogStore.setCurrencyData(element, 'Sell')
-}
+  DialogStore.setCurrencyData(element, "Sell");
+};
 const formatAlign = (index, element) => {
   const included = expandItemsList.value.includes(index);
 
   if (included) {
-    expandItemsList.value = expandItemsList.value.filter((item) => item !== index);
+    expandItemsList.value = expandItemsList.value.filter(
+      (item) => item !== index
+    );
     expanded.value = false;
   } else {
     expandItemsList.value.push(index);
@@ -277,12 +295,27 @@ const formatAlign = (index, element) => {
 };
 
 const movingItem = (index, element) => {
-  console.log("movingitem------------>", index, element)
-}
+  console.log("movingitem------------>", index, element);
+};
 const deleteItem = (index, element) => {
-  console.log("deleteitem------------>", index, element)
-}
+  const dbNamesJSON = localStorage.getItem("dbNames");
+  const dbNames = dbNamesJSON ? JSON.parse(dbNamesJSON) : [];
+  console.log("deleteitem------------>", index, element, dbNames);
+  dbNames.filter((id) => console.log(id !== element.id));
+  // Use filter to create a new array without the item to delete
+  const updatedDbNames = dbNames.filter(id => id !== element.id);
 
+  // Store the updated array back in local storage
+  const updatedDbNamesJSON = JSON.stringify(updatedDbNames);
+  console.log("updatedDbNamesJSON-------------", updatedDbNamesJSON);
+  localStorage.setItem("dbNames", updatedDbNamesJSON);
+  marketDepthDataStore.delTableFromDb(element.id);
+  filteredList.value;
+};
+const addCurrencyToList = (index, element) => {
+  console.log("addCurrencyToList---------------------", index, element);
+  marketDepthDataStore.displayFromLocalStorage(element.id);
+};
 </script>
 
 <style scoped>
@@ -310,6 +343,6 @@ const deleteItem = (index, element) => {
 }
 
 .q-item {
-  min-height: 1px
+  min-height: 1px;
 }
 </style>

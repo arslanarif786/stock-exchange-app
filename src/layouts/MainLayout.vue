@@ -14,7 +14,7 @@ import { defineComponent, onMounted } from "vue";
 import DraggableDialog from "../components/draggable/DraggableDialog.vue";
 import Topbar from "./Topbar.vue";
 import Sidebar from "./Sidebar.vue";
-import { useMartekDepthDataStore } from '../stores/market-depth-data';
+// import { useMartekDepthDataStore } from '../stores/market-depth-data';
 
 export default defineComponent({
   name: "MainLayout",
@@ -25,7 +25,7 @@ export default defineComponent({
     DraggableDialog
   },
   setup() {
-    const marketDepthDataStore = useMartekDepthDataStore();
+    // const marketDepthDataStore = useMartekDepthDataStore();
     // Call displayFromLocalStorage on component mount
     // onMounted(() => {
     //   marketDepthDataStore.displayFromLocalStorage('1027585');
