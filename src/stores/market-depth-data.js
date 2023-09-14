@@ -5,6 +5,7 @@ import localStorageDB from "localstoragedb";
 
 export const useMartekDepthDataStore = defineStore("martekDepthData", {
   state: () => ({
+    activeDbList: [],
     data: {},
     db: new localStorageDB("dataStorage", localStorage),
   }),
@@ -35,26 +36,26 @@ export const useMartekDepthDataStore = defineStore("martekDepthData", {
             console.log("zip------------------------", json);
             const processedData = {
               InstrumentToken: json.InstrumentToken,
-              LastPrice: json.LastPrice || "",
-              AveragePrice: json.AveragePrice || "",
-              Open: json.Open || "",
-              High: json.High || "",
-              Low: json.Low || "",
-              Close: json.Close || "",
-              Bids: json.Bids || "",
-              Offers: json.Offers || "",
-              LastTradeTime: json.LastTradeTime || "",
-              OI: json.OI || "",
-              OIDayHigh: json.OIDayHigh || "",
-              OIDayLow: json.OIDayLow || "",
-              Mode: json.Mode || "",
-              Tradable: json.Tradable || "",
-              Change: json.Change || "",
-              LastQuantity: json.LastQuantity || "",
-              BuyQuantity: json.BuyQuantity || "",
-              SellQuantity: json.SellQuantity || "",
-              Volume: json.Volume || "",
-              Timestamp: json.Timestamp || "",
+              LastPrice: json.LastPrice,
+              AveragePrice: json.AveragePrice,
+              Open: json.Open,
+              High: json.High,
+              Low: json.Low,
+              Close: json.Close,
+              Bids: json.Bids,
+              Offers: json.Offers,
+              LastTradeTime: json.LastTradeTime,
+              OI: json.OI,
+              OIDayHigh: json.OIDayHigh,
+              OIDayLow: json.OIDayLow,
+              Mode: json.Mode,
+              Tradable: json.Tradable,
+              Change: json.Change,
+              LastQuantity: json.LastQuantity,
+              BuyQuantity: json.BuyQuantity,
+              SellQuantity: json.SellQuantity,
+              Volume: json.Volume,
+              Timestamp: json.Timestamp,
             };
             // Save to localStorageDB
             this.db.insert(InstrumentId, processedData);
@@ -116,11 +117,14 @@ export const useMartekDepthDataStore = defineStore("martekDepthData", {
     },
 
     async setDataFromLocalStorage(InstrumentId) {
-        await this.setDbName(InstrumentId);
+        if(InstrumentId) {
+            await this.setDbName(InstrumentId);
+        }
         this.db = new localStorageDB("dataStorage", localStorage);
       // Retrieve the array of database names from local storage
       const dbNamesJSON = localStorage.getItem("dbNames");
       const dbNames = dbNamesJSON ? JSON.parse(dbNamesJSON) : [];
+      this.activeDbList = dbNames;
       if (dbNames.length) {
         // Process each database in the array
         for (const dbName of dbNames) {

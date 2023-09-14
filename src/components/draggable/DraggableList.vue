@@ -49,13 +49,22 @@
                 Delete (del)
               </q-tooltip>
             </div>
-            <div v-if="searchIsActive"
+            <div v-if="searchIsActive && !marketDepthDataStore.activeDbList.includes(element.InstrumentToken)"
               class="mr-2 hover:!cursor-pointer px-1.5 my-2 !bg-slate-50 w-9 h-6 hover:text-slate-50 hover:!bg-gray-400 hover:border-gray-400 font-semibold text-center rounded-sm border border-black z-10"
               style="padding-top: 1px" :class="!hoverEffect ? 'hidden' : 'block'"
               @click="addCurrencyToList(index, element)">
               <q-icon name="add" class="mb-1" size="15px" />
               <q-tooltip anchor="top middle" self="bottom middle" :offset="[3, 3]" class="bg-black font-semibold txt13">
                 Add (add)
+              </q-tooltip>
+            </div>
+            <div v-if="searchIsActive && marketDepthDataStore.activeDbList.includes(element.InstrumentToken)"
+              class="mr-2 hover:!cursor-pointer px-1.5 my-2 !bg-slate-50 w-9 h-6 hover:text-slate-50 hover:!bg-gray-400 hover:border-gray-400 font-semibold text-center rounded-sm border border-black z-10"
+              style="padding-top: 1px" :class="!hoverEffect ? 'hidden' : 'block'"
+              >
+              <q-icon name="done" class="mb-1" size="15px" />
+              <q-tooltip anchor="top middle" self="bottom middle" :offset="[3, 3]" class="bg-black font-semibold txt13">
+                Added
               </q-tooltip>
             </div>
             <div
@@ -99,10 +108,17 @@
           </div>
 
           <!----------------------------------- List ---------------------------------->
-          <div class="flex justify-between items-center py-3">
+          <div v-if="searchIsActive" class="flex justify-between items-center py-3">
             <div class="flex w-48">
               <q-item-label class="txt13">
-                {{ element.name }}
+                {{ element.name}}
+              </q-item-label>
+            </div>
+          </div>
+          <div v-else class="flex justify-between items-center py-3">
+            <div class="flex w-48">
+              <q-item-label class="txt13">
+                {{ getCurrencyName(element.InstrumentToken) }}
               </q-item-label>
               <!-- <q-item-label class="txt13" :class="element.changeRate > 0
                 ? 'text-brightGreen'
@@ -116,28 +132,23 @@
                 element.caption
               }}</q-item-label> -->
             </div>
-            <!-- <div class="flex items-center w-48">
+            <div class="flex items-center w-48">
               <q-item-label class="txt13 text-gray-400 text-center w-10">{{
-                element.changeRate
+                (element.LastPrice - element.Open).toFixed(2)
               }}</q-item-label>
               <div class="flex items-center">
-                <q-item-label class="ml-2 txt13 text-gray-500 text-center w-12">{{ element.percentage }}%</q-item-label>
-                <q-icon v-if="element.changeRate == 0" name="panorama_fish_eye" size="13px"
+                <q-item-label class="ml-2 txt13 text-gray-500 text-center w-12">{{ (element.LastPrice - element.Open / element.Open * 100).toFixed(1)  }}%</q-item-label>
+                <!-- <q-icon v-if="element.changeRate == 0" name="panorama_fish_eye" size="13px"
                   class="text-lightGray mt-1 ml-1" />
                 <q-icon v-else-if="element.changeRate > 0" name="keyboard_arrow_up" size="20px"
                   class="text-brightGreen mt-1" />
                 <q-icon v-else-if="element.changeRate < 0" name="keyboard_arrow_down" class="text-brightRed mt-1"
-                  size="20px" />
+                  size="20px" /> -->
               </div>
-              <q-item-label class="ml-4 txt13 text-right w-10" :class="element.changeRate > 0
-                ? 'text-brightGreen'
-                : element.changeRate == 0
-                  ? 'text-gray-500'
-                  : 'text-brightRed'
-                ">
-                {{ element.changedPrice }}
+              <q-item-label class="ml-4 txt13 text-right w-10">
+                {{ element.LastPrice   }}
               </q-item-label>
-            </div> -->
+            </div>
           </div>
         </div>
         <market-depth v-if="expandItemsList.includes(index)">
@@ -148,7 +159,7 @@
                   <q-table
                     dense
                     flat
-                    :rows="rowBlueTable"
+                    :rows="element.Bids"
                     :columns="columnBlueTable"
                     row-key="name"
                     :separator="separator"
@@ -164,7 +175,7 @@
                   <q-table
                     dense
                     flat
-                    :rows="rowOrangeTable"
+                    :rows="element.Offers"
                     :columns="columnOrangeTable"
                     row-key="name"
                     :separator="separator"
@@ -183,55 +194,55 @@
               <div class="flex">
                 <div class="flex w-1/2 justify-between ">
                   <div class="txt13 text-gray-500">Open</div>
-                  <div class="txt13">0.00</div>
+                  <div class="txt13">{{element.Open}}</div>
                 </div>
                 <div class="flex w-1/2 pl-2 justify-between ">
                   <div class="txt13 text-gray-500">High</div>
-                  <div class="txt13">1.00</div>
+                  <div class="txt13">{{ element.High }}</div>
                 </div>
               </div>
 
               <div class="flex">
                 <div class="flex w-1/2 justify-between ">
                   <div class="txt13 text-gray-500">Low</div>
-                  <div class="txt13">0.00</div>
+                  <div class="txt13">{{ element.Low }}</div>
                 </div>
                 <div class="flex w-1/2 pl-2 justify-between ">
                   <div class="txt13 text-gray-500">Prev. Close</div>
-                  <div class="txt13">1.00</div>
+                  <div class="txt13">{{ element.Close }}</div>
                 </div>
               </div>
 
               <div class="flex">
                 <div class="flex w-1/2 justify-between ">
                   <div class="txt13 text-gray-500">Volume</div>
-                  <div class="txt13">0.00</div>
+                  <div class="txt13">{{ element.Volume }}</div>
                 </div>
                 <div class="flex w-1/2 pl-2 justify-between ">
                   <div class="txt13 text-gray-500">Avg. price</div>
-                  <div class="txt13">1.00</div>
+                  <div class="txt13">{{ element.AveragePrice }}</div>
                 </div>
               </div>
 
               <div class="flex">
                 <div class="flex w-1/2 justify-between ">
                   <div class="txt13 text-gray-500">LTQ</div>
-                  <div class="txt13">0.00</div>
+                  <div class="txt13">{{ element.LastQuantity }}</div>
                 </div>
                 <div class="flex w-1/2 pl-2 justify-between ">
                   <div class="txt13 text-gray-500">LTT</div>
-                  <div class="txt13">1.00</div>
+                  <div class="txt13">{{ element.LastTradeTime }}</div>
                 </div>
               </div>
 
               <div class="flex">
                 <div class="flex w-1/2 justify-between ">
                   <div class="txt13 text-gray-500">Lower ciruit</div>
-                  <div class="txt13">0.00</div>
+                  <div class="txt13">{{ element.OIDayLow }}</div>
                 </div>
                 <div class="flex w-1/2 pl-2 justify-between ">
                   <div class="txt13 text-gray-500">Upper circuit</div>
-                  <div class="txt13">1.00</div>
+                  <div class="txt13">{{ element.OIDayHigh }}</div>
                 </div>
               </div>
               </div>
@@ -269,6 +280,7 @@ const selectedDepth = ref(0);
 const dragging = ref(false);
 const expandItemsList = ref([]);
 const searchIsActive = ref(false);
+const selectedCurrencyList = ref([])
 const lists = ref([
   {
     title: "SUZLON",
@@ -329,9 +341,9 @@ const lists = ref([
 ]);
 const separator = ref("vertical")
 const columnBlueTable = ref([
-  { name: 'bid', align: 'center', label: 'BID', field: 'bid' },
-  { name: 'orders', label: 'ORDERS', field: 'orders' },
-  { name: 'qty', align: 'right', label: 'QTY.', field: 'qty' },
+  { name: 'bid', align: 'center', label: 'BID', field: 'Price' },
+  { name: 'orders', label: 'ORDERS', field: 'Orders' },
+  { name: 'qty', align: 'right', label: 'QTY.', field: 'Quantity' },
 ])
 const rowBlueTable = ref([
   {
@@ -386,9 +398,9 @@ const rowBlueTable = ref([
   }
 ])
 const columnOrangeTable = ref([
-  { name: 'offer', align: 'center', label: 'OFFER', field: 'offer' },
-  { name: 'orders', label: 'ORDERS', field: 'orders' },
-  { name: 'qty', align: 'right', label: 'QTY.', field: 'qty' },
+  { name: 'offer', align: 'center', label: 'OFFER', field: 'Price' },
+  { name: 'orders', label: 'ORDERS', field: 'Orders' },
+  { name: 'qty', align: 'right', label: 'QTY.', field: 'Quantity' },
 ])
 const rowOrangeTable = ref([
   {
@@ -445,13 +457,13 @@ const rowOrangeTable = ref([
 
 // computed
 const filteredList = computed(() => {
-  console.log("computed has run--------------")
   const dbNamesJSON = localStorage.getItem("dbNames");
   const dbNames = dbNamesJSON ? JSON.parse(dbNamesJSON) : [];
   const searchTerm = props.searchQuery.toLowerCase();
   if (!searchTerm) {
     searchIsActive.value = false;
-    return data.filter((obj) => dbNames.includes(obj.id) && obj);
+    selectedCurrencyList.value = Object.values(marketDepthDataStore.data);
+    return selectedCurrencyList.value
   }
   searchIsActive.value = true;
   return data.filter((obj) => obj.name.toLowerCase().includes(searchTerm));
@@ -463,6 +475,10 @@ watch(filteredList, (newVal) => {
 });
 
 // methods
+const getCurrencyName = (id) => {
+  const currencyData = data.find(obj => obj.id === id);
+  return currencyData ? currencyData.name : ''; // Return the currency name if found, otherwise an empty string
+};
 const hoverEffectTrue = (index) => {
   hoverEffect.value = true;
   hoverItem.value = index;
@@ -498,20 +514,15 @@ const formatAlign = (index, element) => {
 const movingItem = (index, element) => {
   console.log("movingitem------------>", index, element);
 };
-const deleteItem = (index, element) => {
+const deleteItem = async(index, element) => {
   const dbNamesJSON = localStorage.getItem("dbNames");
   const dbNames = dbNamesJSON ? JSON.parse(dbNamesJSON) : [];
-  console.log("deleteitem------------>", index, element, dbNames);
-  dbNames.filter((id) => console.log(id !== element.id));
-  // Use filter to create a new array without the item to delete
-  const updatedDbNames = dbNames.filter(id => id !== element.id);
-
+  const updatedDbNames = dbNames.filter(id => id !== element.InstrumentToken);
   // Store the updated array back in local storage
   const updatedDbNamesJSON = JSON.stringify(updatedDbNames);
-  console.log("updatedDbNamesJSON-------------", updatedDbNamesJSON);
   localStorage.setItem("dbNames", updatedDbNamesJSON);
-  marketDepthDataStore.delTableFromDb(element.id);
-  filteredList.value;
+  await marketDepthDataStore.delTableFromDb(element.InstrumentToken);
+  marketDepthDataStore.setDataFromLocalStorage();
 };
 const addCurrencyToList = (index, element) => {
   console.log("addCurrencyToList---------------------", index, element);
