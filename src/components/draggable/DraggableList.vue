@@ -49,7 +49,7 @@
                 Delete (del)
               </q-tooltip>
             </div>
-            <div v-if="searchIsActive && !marketDepthDataStore.activeDbList.includes(element.InstrumentToken)"
+            <div v-if="searchIsActive && !marketDepthDataStore.activeDbList.includes(element.id)"
               class="mr-2 hover:!cursor-pointer px-1.5 my-2 !bg-slate-50 w-9 h-6 hover:text-slate-50 hover:!bg-gray-400 hover:border-gray-400 font-semibold text-center rounded-sm border border-black z-10"
               style="padding-top: 1px" :class="!hoverEffect ? 'hidden' : 'block'"
               @click="addCurrencyToList(index, element)">
@@ -58,7 +58,7 @@
                 Add (add)
               </q-tooltip>
             </div>
-            <div v-if="searchIsActive && marketDepthDataStore.activeDbList.includes(element.InstrumentToken)"
+            <div v-if="searchIsActive && marketDepthDataStore.activeDbList.includes(element.id)"
               class="mr-2 hover:!cursor-pointer px-1.5 my-2 !bg-slate-50 w-9 h-6 hover:text-slate-50 hover:!bg-gray-400 hover:border-gray-400 font-semibold text-center rounded-sm border border-black z-10"
               style="padding-top: 1px" :class="!hoverEffect ? 'hidden' : 'block'"
               >
