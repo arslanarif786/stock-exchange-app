@@ -43,13 +43,24 @@
                 </q-item-label>
             </div>
         </template>
-        <dialod-body />
+        <dialog-body />
         <template #footer class="footer">
-            <span class="dialog-footer">
-                <el-button class="buy-sell-btn">
-                    {{ DialogStore.activeMode === 'Buy' ? 'Buy' : 'Sell' }}
-                </el-button>
-                <el-button @click="handleClose">Cancel</el-button>
+            <span class="dialog-footer flex justify-between">
+                <div class="flex txt13">
+                    <span> Margin </span>
+                    <span class="ml-1 text-brightBlue"> $2.79</span>
+                    <span class="ml-2"> Charges</span>
+                    <span class="ml-1 text-brightBlue"> $0.07</span>
+                    <span class="ml-2 text-brightBlue mt-0.5">
+                        <q-icon name="replay" class="mb-1 cursor-pointer" size="15px" />
+                    </span>
+                </div>
+                <div>
+                    <el-button class="buy-sell-btn">
+                        {{ DialogStore.activeMode === 'Buy' ? 'Buy' : 'Sell' }}
+                    </el-button>
+                    <el-button @click="handleClose">Cancel</el-button>
+                </div>
             </span>
         </template>
     </el-dialog>
@@ -60,7 +71,7 @@ import { useDialogStore } from '../../stores/handle-dialog';
 import 'element-plus/dist/index.css'
 import { ElButton, ElDialog, ElSwitch, ElIcon } from 'element-plus';
 import { WarningFilled } from '@element-plus/icons-vue';
-import DialodBody from './DialogBody.vue'
+import DialogBody from './DialogBody.vue'
 import { ref } from "vue"
 
 const DialogStore = useDialogStore();
@@ -135,6 +146,13 @@ const handleClose = () => {
 .sell-theme .el-dialog__footer .buy-sell-btn {
     background-color: #FF5722;
     color: white;
+}
+.el-dialog__footer {
+    background-color: #f6f6f6;
+}
+:deep(.el-dialog__body) {
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
 }
 </style>
   
