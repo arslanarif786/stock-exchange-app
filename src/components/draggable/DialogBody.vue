@@ -32,7 +32,7 @@
                 </div>
               </div>
               <div>
-                <q-input v-model.number="price" type="number" min="0" outlined label="Price" stack-label dense
+                <q-input v-model.number="DialogStore.currencyData.LastPrice" type="number" min="0" outlined label="Price" stack-label dense
                   class="mt-3" style="max-width: 200px" />
               </div>
               <div class="flex mt-2">
@@ -86,15 +86,17 @@
 </template>
 <script>
 import { ref } from "vue";
-
+import { useDialogStore } from '../../stores/handle-dialog';
 export default {
   setup() {
+    const DialogStore = useDialogStore();
     const radioOption = ref("");
-    const quantity = ref(true);
+    const quantity = ref("1");
     const price = ref(null);
     const triggerPrice = ref("0");
     const selectMarketOrLimit = ref("limit");
     return {
+      DialogStore,
       tab: ref("mails"),
       quantity,
       radioOption,

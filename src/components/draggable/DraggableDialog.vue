@@ -6,6 +6,7 @@
                 <div class="header-right-section">
                     <q-item-label class="txt15">
                         {{ DialogStore.activeMode }}
+                        {{ getCurrencyName(DialogStore.currencyData.InstrumentToken) }}
                     </q-item-label>
                     <q-item-label class="txt15">
                         {{ DialogStore.currencyData.title || '' }}
@@ -15,6 +16,9 @@
                             }}
                         </span>
                     </q-item-label>
+                    <span class="txt13 text-white">
+                        NSE
+                    </span>
                     <q-item-label class="txt15">
                         x 2 QTY
                     </q-item-label>
@@ -36,9 +40,14 @@
                 <q-item-label class="txt15">
                     {{ DialogStore.currencyData.caption || '' }}
                     <span caption class="txt12">
-                        {{
-                            '₹' + DialogStore.currencyData.changedPrice || ''
+                       BSE: {{
+                            '₹' + DialogStore.currencyData.High || ''
                         }}
+                        <span class="ml-4">
+                            NSE: {{ 
+                            '₹' + DialogStore.currencyData.LastPrice || ''
+                        }}
+                        </span>
                     </span>
                 </q-item-label>
             </div>
@@ -48,9 +57,9 @@
             <span class="dialog-footer flex justify-between">
                 <div class="flex txt13">
                     <span> Margin </span>
-                    <span class="ml-1 text-brightBlue"> $2.79</span>
+                    <span class="ml-1 text-brightBlue"> {{ DialogStore.currencyData.LastPrice }}</span>
                     <span class="ml-2"> Charges</span>
-                    <span class="ml-1 text-brightBlue"> $0.07</span>
+                    <span class="ml-1 text-brightBlue"> ₹0.01</span>
                     <span class="ml-2 text-brightBlue mt-0.5">
                         <q-icon name="replay" class="mb-1 cursor-pointer" size="15px" />
                     </span>
@@ -72,6 +81,7 @@ import 'element-plus/dist/index.css'
 import { ElButton, ElDialog, ElSwitch, ElIcon } from 'element-plus';
 import { WarningFilled } from '@element-plus/icons-vue';
 import DialogBody from './DialogBody.vue'
+import data from "../../data";
 import { ref } from "vue"
 
 const DialogStore = useDialogStore();
@@ -81,6 +91,10 @@ const handleClose = () => {
     value.value = false
     DialogStore.closeDiallog()
 }
+const getCurrencyName = (id) => {
+  const currencyData = data.find(obj => obj.id === id);
+  return currencyData ? currencyData.name : ''; // Return the currency name if found, otherwise an empty string
+};
 </script>   
 <style>
 .my-header-first-section {

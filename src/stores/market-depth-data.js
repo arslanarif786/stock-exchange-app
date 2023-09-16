@@ -5,6 +5,7 @@ import localStorageDB from "localstoragedb";
 
 export const useMartekDepthDataStore = defineStore("martekDepthData", {
   state: () => ({
+    intervals: {},
     activeDbList: [],
     data: {},
     db: new localStorageDB("dataStorage", localStorage),
@@ -12,7 +13,7 @@ export const useMartekDepthDataStore = defineStore("martekDepthData", {
 
   actions: {
     async fetchData(InstrumentId) {
-      const url = `https://tickerdata.blob.core.windows.net/ticker-data-zip/2023/09/05/${InstrumentId}/0945-1000.zip?sp=r&st=2023-09-08T19:09:43Z&se=2023-09-23T03:09:43Z&sv=2022-11-02&sr=b&sig=nXEhIAmnwwsob%2B7m5UH%2BKk%2BpbNFP6WChbLDVwcMM4rU%3D`;
+      const url = `https://tickerdata.blob.core.windows.net/ticker-data-zip/2023/08/22/${InstrumentId}/1100-1115.zip`
 
       try {
         const response = await axios.get(url, { responseType: "arraybuffer" });
@@ -33,7 +34,6 @@ export const useMartekDepthDataStore = defineStore("martekDepthData", {
         lines.forEach((line) => {
           if (line) {
             const json = JSON.parse(line);
-            console.log("zip------------------------", json);
             const processedData = {
               InstrumentToken: json.InstrumentToken,
               LastPrice: json.LastPrice,
@@ -68,49 +68,48 @@ export const useMartekDepthDataStore = defineStore("martekDepthData", {
     },
 
     async displayFromLocalStorage(InstrumentId) {
+      const tableColumns = [
+        "InstrumentToken",
+        "LastPrice",
+        "LastQuantity",
+        "AveragePrice",
+        "BuyQuantity",
+        "SellQuantity",
+        "Volume",
+        "Timestamp",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Bids",
+        "Offers",
+        "LastTradeTime",
+        "OI",
+        "OIDayHigh",
+        "OIDayLow",
+        "Mode",
+        "Tradable",
+        "Change",
+      ]
+      const id = parseInt(InstrumentId)
       try {
         // Create a table if it doesn't exist
-        if (!this.db.tableExists(InstrumentId)) {
-          this.db.createTable(InstrumentId, [
-            "InstrumentToken",
-            "LastPrice",
-            "LastQuantity",
-            "AveragePrice",
-            "BuyQuantity",
-            "SellQuantity",
-            "Volume",
-            "Timestamp",
-            "Open",
-            "High",
-            "Low",
-            "Close",
-            "Bids",
-            "Offers",
-            "LastTradeTime",
-            "OI",
-            "OIDayHigh",
-            "OIDayLow",
-            "Mode",
-            "Tradable",
-            "Change",
-          ]);
+        if (!this.db.tableExists(id)) {
+          this.db.createTable(id, tableColumns);
           this.db.commit();
-          console.log(`Table ${InstrumentId} created in localStorageDB`);
+          console.log(`Table ${id} created in localStorageDB`);
         }
-        const records = this.db.queryAll(InstrumentId);
+        const records = this.db.queryAll(id);
         // If no records are found in localStorageDB, fetch and process the data.
-        console.log("data--------------------from db", records);
         if (!records.length) {
-          console.log("!records.length--------------------------");
-          const res = await this.fetchData(InstrumentId);
+          const res = await this.fetchData(id);
           if (res) {
-            this.setDataFromLocalStorage(InstrumentId);
+            this.setDataFromLocalStorage(id);
             return;
           }
           return;
         }
-        console.log("!records.length-------------------------- after return")
-        this.setDataFromLocalStorage(InstrumentId);
+        this.setDataFromLocalStorage(id);
       } catch (error) {
         console.log("displayFromLocalStorage fuction error", error);
       }
@@ -135,27 +134,32 @@ export const useMartekDepthDataStore = defineStore("martekDepthData", {
         console.warn("No database names found in local storage.");
       }
     },
-
+    
     async processDatabase(dbName) {
       let index = 0;
-      const interval = setInterval(() => {
-        const updatedRecords = this.db.queryAll(dbName); // Replace 'yourTableName' with the actual table name you want to query.
+      if (this.intervals[dbName]) {
+        // Clear the previous interval if it exists
+        clearInterval(this.intervals[dbName]);
+      }
+      this.intervals[dbName] = setInterval(() => {
+        const updatedRecords = this.db.queryAll(dbName);
         if (index < updatedRecords.length) {
           this.data[dbName] = updatedRecords[index];
           index++;
         } else {
           console.log(`All records displayed for ${dbName}`);
-          clearInterval(interval);
+          clearInterval(this.intervals[dbName]); // Clear the interval when done
         }
       }, 1000);
     },
+    
     async setDbName(newDbName) {
       try {
         // Retrieve the existing dbNames array from local storage
         const dbNamesJSON = localStorage.getItem("dbNames");
         const dbNames = dbNamesJSON ? JSON.parse(dbNamesJSON) : [];
         if (!dbNames.includes(newDbName)) {
-          dbNames.push(newDbName);
+          dbNames.unshift(newDbName);
         } else {
           return;
         }
